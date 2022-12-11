@@ -99,9 +99,19 @@ boolean HammerPress(int molepin, long regulatedTime,long cumulatedTime){
   //Judge if the corresponding hammer key is pressed
   judgehammer = map(molepin, mole1, mole6, hammer1, hammer6);
   long shortcountTime = millis()-cumulatedTime;
-  hit = false;
-  if ((digitalRead(judgehammer)==HIGH)&&(shortcountTime<=regulatedTime*2)){
-    hit = true;
+  hit = false; boolean originalstate = LOW;
+  if ((digitalRead(judgehammer)!=originalstate)&&(shortcountTime<=regulatedTime)){
+    shortcountTime = millis()-cumulatedTime;
+    originalstate = HIGH;
+    if (digitalRead(judgehammer)!=originalstate){
+      shortcountTime = millis()-cumulatedTime;
+      if ((digitalRead(judgehammer)==originalstate)&&(shortcountTime<=regulatedTime)){
+        hit = true;
+      }
+    }
+    else if ((digitalRead(judgehammer)==originalstate)&&(shortcountTime<=regulatedTime)){
+        hit = true;
+      }
   }
   return hit;
 }
